@@ -10,6 +10,7 @@ import AccountPage from '../Account'
 import AdminPage from '../Admin'
 import * as ROUTES from '../../constants/routes'
 import { FirebaseContext } from '../Firebase'
+import { AuthUserContext } from '../Session'
 
 function App() {
   const [authUser, setAuthUser] = useState(null)
@@ -26,17 +27,19 @@ function App() {
   }, [firebase])
 
   return (
-    <BrowserRouter>
-      <Navigation authUser={authUser} />
-      <Route exact path={ROUTES.LANDING} component={LandingPage} />
-      <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
-      <Route exact path={ROUTES.HOME} component={HomePage} />
-      <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
+    <AuthUserContext.Provider value={authUser}>
+      <BrowserRouter>
+        <Navigation />
+        <Route exact path={ROUTES.LANDING} component={LandingPage} />
+        <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
+        <Route exact path={ROUTES.HOME} component={HomePage} />
+        <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
 
-      {/* <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+        {/* <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
       <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
       <Route exact path={ROUTES.ADMIN} component={AdminPage} /> */}
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthUserContext.Provider>
   )
 }
 

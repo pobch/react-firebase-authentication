@@ -46,7 +46,7 @@ function SignInForm() {
   const isInvalid = state.email === '' || state.password === ''
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <input
         type="email"
         name="email"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import Navigation from '../Navigation'
 import LandingPage from '../Landing'
@@ -9,25 +9,11 @@ import HomePage from '../Home'
 import AccountPage from '../Account'
 import AdminPage from '../Admin'
 import * as ROUTES from '../../constants/routes'
-import { FirebaseContext } from '../Firebase'
-import { AuthUserContext } from '../Session'
+import { AuthProvider } from '../Session'
 
 function App() {
-  const [authUser, setAuthUser] = useState(null)
-  const firebase = useContext(FirebaseContext)
-
-  useEffect(() => {
-    const listener = firebase.auth.onAuthStateChanged(authUser => {
-      authUser ? setAuthUser(authUser) : setAuthUser(null)
-    })
-
-    return () => {
-      listener()
-    }
-  }, [firebase])
-
   return (
-    <AuthUserContext.Provider value={authUser}>
+    <AuthProvider>
       <BrowserRouter>
         <Navigation />
         <Route exact path={ROUTES.LANDING} component={LandingPage} />
@@ -39,7 +25,7 @@ function App() {
       <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
       <Route exact path={ROUTES.ADMIN} component={AdminPage} /> */}
       </BrowserRouter>
-    </AuthUserContext.Provider>
+    </AuthProvider>
   )
 }
 

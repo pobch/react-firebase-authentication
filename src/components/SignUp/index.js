@@ -39,7 +39,7 @@ function SignUpForm() {
         history.push(ROUTES.HOME)
       })
       .catch(error => {
-        setState({ ...state, error })
+        setState(prev => ({ ...prev, error }))
       })
   }
 

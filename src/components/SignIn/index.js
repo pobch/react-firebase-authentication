@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { SignUpLink } from '../SignUp'
+import { PasswordForgetLink } from '../PasswordForget'
 import { FirebaseContext } from '../Firebase'
 import * as ROUTES from '../../constants/routes'
 
@@ -9,6 +10,7 @@ function SignInPage() {
     <div>
       <h1>Sign In</h1>
       <SignInForm />
+      <PasswordForgetLink />
       <SignUpLink />
     </div>
   )
@@ -39,7 +41,7 @@ function SignInForm() {
         history.push(ROUTES.HOME)
       })
       .catch(error => {
-        setState({ ...state, error })
+        setState(prev => ({ ...prev, error }))
       })
   }
 

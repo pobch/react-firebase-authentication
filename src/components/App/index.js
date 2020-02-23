@@ -9,7 +9,11 @@ import HomePage from '../Home'
 import AccountPage from '../Account'
 import AdminPage from '../Admin'
 import * as ROUTES from '../../constants/routes'
-import { AuthProvider } from '../Session'
+import { AuthProvider, withAuthorization } from '../Session'
+
+function isAuth(authUser) {
+  return !!authUser
+}
 
 function App() {
   return (
@@ -18,10 +22,10 @@ function App() {
         <Navigation />
         <Route exact path={ROUTES.LANDING} component={LandingPage} />
         <Route exact path={ROUTES.SIGN_UP} component={SignUpPage} />
-        <Route exact path={ROUTES.HOME} component={HomePage} />
+        <Route exact path={ROUTES.HOME} component={withAuthorization(isAuth)(HomePage)} />
         <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
         <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-        <Route exact path={ROUTES.ACCOUNT} component={AccountPage} />
+        <Route exact path={ROUTES.ACCOUNT} component={withAuthorization(isAuth)(AccountPage)} />
         {/* <Route exact path={ROUTES.ADMIN} component={AdminPage} /> */}
       </BrowserRouter>
     </AuthProvider>

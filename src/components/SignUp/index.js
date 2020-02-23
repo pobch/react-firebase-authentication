@@ -35,6 +35,9 @@ function SignUpForm() {
     firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
+        return firebase.user(authUser.user.uid).set({ username, email })
+      })
+      .then(() => {
         setState(INITIAL_STATE)
         history.push(ROUTES.HOME)
       })

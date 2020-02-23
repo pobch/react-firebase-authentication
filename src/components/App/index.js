@@ -26,7 +26,7 @@ function App() {
         <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
         <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
         <Route exact path={ROUTES.ACCOUNT} component={withAuthorization(isAuth)(AccountPage)} />
-        {/* <Route exact path={ROUTES.ADMIN} component={AdminPage} /> */}
+        <Route exact path={ROUTES.ADMIN} component={AdminPage} />
       </BrowserRouter>
     </AuthProvider>
   )

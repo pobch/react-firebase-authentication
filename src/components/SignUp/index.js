@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import { FirebaseContext } from '../Firebase'
 import { Link, useHistory } from 'react-router-dom'
 import * as ROUTES from '../../constants/routes'
+import * as ROLES from '../../constants/roles'
 
 function SignUpPage() {
   return (
@@ -17,6 +18,7 @@ const INITIAL_STATE = {
   email: '',
   passwordOne: '',
   passwordTwo: '',
+  isAdmin: false,
   error: null
 }
 function SignUpForm() {
@@ -28,14 +30,22 @@ function SignUpForm() {
     setState({ ...state, [e.target.name]: e.target.value })
   }
 
+  function handleChangeCheckbox(e) {
+    setState({ ...state, isAdmin: e.target.checked })
+  }
+
   function handleSubmit(e) {
     e.preventDefault()
-    const { username, email, passwordOne } = state
+    const { username, email, passwordOne, isAdmin } = state
+    let roles = {}
+    if (isAdmin) {
+      roles[ROLES.ADMIN] = ROLES.ADMIN
+    }
 
     firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-        return firebase.user(authUser.user.uid).set({ username, email })
+        return firebase.user(authUser.user.uid).set({ username, email, roles })
       })
       .then(() => {
         setState(INITIAL_STATE)
@@ -82,6 +92,15 @@ function SignUpForm() {
         value={state.passwordTwo}
         placeholder="Confirm Password"
       />
+      <label>
+        Admin:
+        <input
+          type="checkbox"
+          name="isAdmin"
+          checked={state.isAdmin}
+          onChange={handleChangeCheckbox}
+        />
+      </label>
       <button type="submit" disabled={isInvalid}>
         Sign Up
       </button>

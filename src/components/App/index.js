@@ -9,10 +9,15 @@ import HomePage from '../Home'
 import AccountPage from '../Account'
 import AdminPage from '../Admin'
 import * as ROUTES from '../../constants/routes'
+import * as ROLES from '../../constants/roles'
 import { AuthProvider, withAuthorization } from '../Session'
 
 function isAuth(authUser) {
   return !!authUser
+}
+
+function isAdmin(authUser) {
+  return !!authUser && authUser.roles && authUser.roles[ROLES.ADMIN]
 }
 
 function App() {
@@ -26,7 +31,7 @@ function App() {
         <Route exact path={ROUTES.SIGN_IN} component={SignInPage} />
         <Route exact path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
         <Route exact path={ROUTES.ACCOUNT} component={withAuthorization(isAuth)(AccountPage)} />
-        <Route exact path={ROUTES.ADMIN} component={AdminPage} />
+        <Route exact path={ROUTES.ADMIN} component={withAuthorization(isAdmin)(AdminPage)} />
       </BrowserRouter>
     </AuthProvider>
   )

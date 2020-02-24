@@ -7,9 +7,14 @@ export function AuthProvider(props) {
   const firebase = useContext(FirebaseContext)
 
   useEffect(() => {
-    const listener = firebase.auth.onAuthStateChanged(authUser => {
-      authUser ? setAuthUser(authUser) : setAuthUser(null)
-    })
+    const listener = firebase.onAuthUserListener(
+      authUser => {
+        setAuthUser(authUser)
+      },
+      () => {
+        setAuthUser(null)
+      }
+    )
 
     return () => {
       listener()

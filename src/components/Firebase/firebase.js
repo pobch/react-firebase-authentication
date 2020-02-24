@@ -47,6 +47,34 @@ class Firebase {
   users = () => {
     return this.db.ref('users')
   }
+
+  onAuthUserListener = (next, fallback) => {
+    // return function to unsubscribe
+    return this.auth.onAuthStateChanged(authUser => {
+      if (authUser) {
+        // fetch additional data from db service
+        this.user(authUser.uid)
+          .once('value')
+          .then(snapshot => {
+            const dbUser = snapshot.val()
+            // create `roles` if there is not any
+            if (!dbUser.roles) {
+              dbUser.roles = {}
+            }
+            // merge data from 2 services: auth and db
+            authUser = {
+              uid: authUser.uid,
+              email: authUser.email,
+              ...dbUser
+            }
+            // call callback function with `authUser` as an argument
+            next(authUser)
+          })
+      } else {
+        fallback()
+      }
+    })
+  }
 }
 
 export { Firebase }

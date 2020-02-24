@@ -26,6 +26,7 @@ function AdminPage() {
   return (
     <div>
       <h1>Admin Page</h1>
+      <p>The Admin Page is accessible by admin users only.</p>
       {state.loading && <div>Loading...</div>}
       <UserList users={state.users} />
     </div>

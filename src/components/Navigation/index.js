@@ -2,7 +2,8 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import SignOutButton from '../SignOut'
 import { AuthUserContext } from '../Session'
-import * as ROUTES from '../../constants//routes'
+import * as ROUTES from '../../constants/routes'
+import * as ROLES from '../../constants/roles'
 
 function Navigation() {
   const authUser = useContext(AuthUserContext)
@@ -10,6 +11,7 @@ function Navigation() {
 }
 
 function NavigationAuth() {
+  const authUser = useContext(AuthUserContext)
   return (
     <div>
       <ul>
@@ -22,9 +24,11 @@ function NavigationAuth() {
         <li>
           <Link to={ROUTES.ACCOUNT}>Account</Link>
         </li>
-        <li>
-          <Link to={ROUTES.ADMIN}>Admin</Link>
-        </li>
+        {authUser.roles[ROLES.ADMIN] && (
+          <li>
+            <Link to={ROUTES.ADMIN}>Admin</Link>
+          </li>
+        )}
         <li>
           <SignOutButton />
         </li>

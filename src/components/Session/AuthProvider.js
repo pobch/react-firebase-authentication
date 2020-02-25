@@ -3,15 +3,17 @@ import { FirebaseContext } from '../Firebase'
 import { AuthUserContext } from './context'
 
 export function AuthProvider(props) {
-  const [authUser, setAuthUser] = useState(null)
+  const [authUser, setAuthUser] = useState(JSON.parse(localStorage.getItem('authUser')))
   const firebase = useContext(FirebaseContext)
 
   useEffect(() => {
     const listener = firebase.onAuthUserListener(
       authUser => {
+        localStorage.setItem('authUser', JSON.stringify(authUser))
         setAuthUser(authUser)
       },
       () => {
+        localStorage.removeItem('authUser')
         setAuthUser(null)
       }
     )

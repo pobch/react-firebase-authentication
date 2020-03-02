@@ -16,8 +16,11 @@ const configs = {
 class Firebase {
   constructor() {
     app.initializeApp(configs)
+
     this.auth = app.auth()
     this.db = app.database()
+
+    this.googleProvider = new app.auth.GoogleAuthProvider()
   }
 
   doCreateUserWithEmailAndPassword = (email, password) => {
@@ -26,6 +29,10 @@ class Firebase {
 
   doSignInWithEmailAndPassword = (email, password) => {
     return this.auth.signInWithEmailAndPassword(email, password)
+  }
+
+  doSignInWithGoogle = () => {
+    return this.auth.signInWithPopup(this.googleProvider)
   }
 
   doSignOut = () => {

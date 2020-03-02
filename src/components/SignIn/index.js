@@ -10,6 +10,7 @@ function SignInPage() {
     <div>
       <h1>Sign In</h1>
       <SignInForm />
+      <SignInGoogle />
       <PasswordForgetLink />
       <SignUpLink />
     </div>
@@ -68,6 +69,42 @@ function SignInForm() {
       </button>
 
       {state.error && <p>{state.error.message}</p>}
+    </form>
+  )
+}
+
+function SignInGoogle() {
+  const [error, setError] = useState(null)
+  const firebase = useContext(FirebaseContext)
+  const history = useHistory()
+
+  function handleSubmit(e) {
+    e.preventDefault()
+
+    firebase
+      .doSignInWithGoogle()
+      .then(socialAuthUser => {
+        console.log('More info', socialAuthUser.additionalUserInfo)
+        console.log('User info', socialAuthUser)
+        return firebase.user(socialAuthUser.user.uid).set({
+          username: socialAuthUser.user.displayName,
+          email: socialAuthUser.user.email,
+          roles: {}
+        })
+      })
+      .then(() => {
+        setError(null)
+        history.push(ROUTES.HOME)
+      })
+      .catch(error => {
+        setError(error)
+      })
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <button type="submit">Sign In with Google</button>
+      {error && <p>{error.message}</p>}
     </form>
   )
 }

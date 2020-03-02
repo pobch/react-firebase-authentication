@@ -5,6 +5,7 @@ import { AuthUserContext } from '../Session'
 
 function AccountPage() {
   const authUser = useContext(AuthUserContext)
+
   return (
     <div>
       <h1>Account: {authUser.email}</h1>

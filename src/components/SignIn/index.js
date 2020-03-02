@@ -11,6 +11,7 @@ function SignInPage() {
       <h1>Sign In</h1>
       <SignInForm />
       <SignInGoogle />
+      <SignInFacebook />
       <PasswordForgetLink />
       <SignUpLink />
     </div>
@@ -84,8 +85,6 @@ function SignInGoogle() {
     firebase
       .doSignInWithGoogle()
       .then(socialAuthUser => {
-        console.log('More info', socialAuthUser.additionalUserInfo)
-        console.log('User info', socialAuthUser)
         return firebase.user(socialAuthUser.user.uid).set({
           username: socialAuthUser.user.displayName,
           email: socialAuthUser.user.email,
@@ -104,6 +103,40 @@ function SignInGoogle() {
   return (
     <form onSubmit={handleSubmit}>
       <button type="submit">Sign In with Google</button>
+      {error && <p>{error.message}</p>}
+    </form>
+  )
+}
+
+function SignInFacebook() {
+  const [error, setError] = useState(null)
+  const firebase = useContext(FirebaseContext)
+  const history = useHistory()
+
+  function handleSubmit(e) {
+    e.preventDefault()
+
+    firebase
+      .doSignInWithFacebook()
+      .then(socialAuthUser => {
+        return firebase.user(socialAuthUser.user.uid).set({
+          username: socialAuthUser.additionalUserInfo.profile.name,
+          // email: socialAuthUser.additionalUserInfo.profile.email,
+          roles: {}
+        })
+      })
+      .then(() => {
+        setError(null)
+        history.push(ROUTES.HOME)
+      })
+      .catch(error => {
+        setError(error)
+      })
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <button type="submit">Sign In with Facebook</button>
       {error && <p>{error.message}</p>}
     </form>
   )
